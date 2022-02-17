@@ -24,11 +24,12 @@
 
 ## images of the cheat;
 ### home-page;
-![home_page](https://user-images.githubusercontent.com/81589649/154546499-622c08f7-1898-49f0-81e2-e8b0ed4bec80.png)
+![home_page](https://user-images.githubusercontent.com/81589649/154547853-e1f1a51e-5aa7-4d08-81da-82233a4c942b.png)
 ### esp-page;
-![esp_page](https://user-images.githubusercontent.com/81589649/154546527-736130ee-5dc4-4f2c-860e-d80a086b1c36.png)
+![esp_page](https://user-images.githubusercontent.com/81589649/154547864-36ca7806-38a8-474f-9a1e-f04c61ee48e5.png)
 ### misc-page;
-![misc_page](https://user-images.githubusercontent.com/81589649/154546543-0826de62-dbff-4bd6-bd5c-a4d70f0ddf9d.png)
+![misc_page](https://user-images.githubusercontent.com/81589649/154547871-9badd61e-6d62-4e82-ac33-53d1e27790b1.png)
+
 
 ### 💀 USE AT YOUR OWN RISK 💀
 - I am **not** responsible for anything that happens!
