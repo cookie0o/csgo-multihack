@@ -1,6 +1,6 @@
 <div align=center>
   
-  # 💎csgo-multihack with UI [v1.0]💎
+  # 💎csgo-multihack with UI [v1.1]💎
   
   **⚠️-a wallhack with ui made in python currently (probably) vac undetected!-⚠️** 
   
@@ -13,7 +13,10 @@
 3. bunnyhop
 4. radar esp
 5. noflash
-6. (**VAC-BYPASS Currently only in compiled version!**)
+6. fov changer [zoom in zoom out with custom hotkey]
+7. triggerbot [with custom delay and hotkey]
+8. 
+9. (**VAC-BYPASS Currently only in compiled version!**)
 
 ## Instructions
 1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.0/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe`
@@ -22,13 +25,14 @@
 4. (**maby donate crypto :)** )
 5. **DONE!**
 
-## images of the cheat;
-### home-page;
-![home_page](https://user-images.githubusercontent.com/81589649/154547853-e1f1a51e-5aa7-4d08-81da-82233a4c942b.png)
-### esp-page;
-![esp_page](https://user-images.githubusercontent.com/81589649/154547864-36ca7806-38a8-474f-9a1e-f04c61ee48e5.png)
-### misc-page;
-![misc_page](https://user-images.githubusercontent.com/81589649/154547871-9badd61e-6d62-4e82-ac33-53d1e27790b1.png)
+## cheat UI;
+![ezgif-5-cfc3314928](https://user-images.githubusercontent.com/81589649/154828549-ebc4dabd-a65a-4bdb-ae6a-62b48405df60.gif)
+
+## fov changer images;
+**zoom out [fov 130];**
+![130_fov](https://user-images.githubusercontent.com/81589649/154828467-64a508e4-0df8-49c7-b12a-9ea9f224e47e.png)
+**zoom in [fov 80];**
+![80_fov](https://user-images.githubusercontent.com/81589649/154828473-637fabe8-4a9b-4349-a941-7e0c7353fd48.png)
 
 
 ### 💀 USE AT YOUR OWN RISK 💀
