@@ -29,9 +29,9 @@
 ![ezgif-5-cfc3314928](https://user-images.githubusercontent.com/81589649/154828549-ebc4dabd-a65a-4bdb-ae6a-62b48405df60.gif)
 
 ## fov changer images;
-**zoom out [fov 130];**
+### **zoom out [fov 130];**
 ![130_fov](https://user-images.githubusercontent.com/81589649/154828467-64a508e4-0df8-49c7-b12a-9ea9f224e47e.png)
-**zoom in [fov 80];**
+### **zoom in [fov 80];**
 ![80_fov](https://user-images.githubusercontent.com/81589649/154828473-637fabe8-4a9b-4349-a941-7e0c7353fd48.png)
 
 
