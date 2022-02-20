@@ -15,7 +15,6 @@
 5. noflash
 6. fov changer [zoom in zoom out with custom hotkey]
 7. triggerbot [with custom delay and hotkey]
-8. 
 9. (**VAC-BYPASS Currently only in compiled version!**)
 
 ## Instructions
