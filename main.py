@@ -14,7 +14,7 @@ from offsets import *
 
 #github link and version
 github_url='https://github.com/cookie0o'
-CURRENT_VERSION='1.1'
+CURRENT_VERSION='v1.1'
 
 
 #PATHS
