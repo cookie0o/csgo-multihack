@@ -755,7 +755,7 @@ class Ui_main_window(object):
         _translate = QtCore.QCoreApplication.translate
         main_window.setWindowTitle(_translate("main_window", "(っ◔◡◔)っ ♥ cs:go multyhack [by; cookie0_o] ♥"))
         self.title.setText(_translate("main_window", "cs:go multyhack by;                 "))
-        self.version.setText(_translate("main_window", "v1.0"))
+        self.version.setText(_translate("main_window", f"{CURRENT_VERSION}"))
         self.github_link_button.setText(_translate("main_window", "cookie0_o"))
         self.label.setText(_translate("main_window", "have fun cheating!"))
         self.inject_notice.setText(_translate("main_window", "inject cheat with selected features;"))
