@@ -13,9 +13,11 @@
 3. bunnyhop
 4. radar esp
 5. noflash
-6. fov changer [zoom in zoom out with custom hotkey]
-7. triggerbot [with custom delay and hotkey]
-9. (**VAC-BYPASS Currently only in compiled version!**)
+6. deject func. to change config [with custom hotkey]
+7. third-person [on/off with custom hotkey]
+8. fov changer [zoom in zoom out with custom hotkey]
+9. triggerbot [with custom delay and hotkey]
+10. (**VAC-BYPASS Currently only in compiled version!**)
 
 ## Instructions
 1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.2/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe`
