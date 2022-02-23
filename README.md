@@ -28,7 +28,7 @@
 5. **DONE!**
 
 ## cheat UI;
-![ezgif-5-cfc3314928](https://user-images.githubusercontent.com/81589649/154828549-ebc4dabd-a65a-4bdb-ae6a-62b48405df60.gif)
+![ezgif-1-85c6d909f4](https://user-images.githubusercontent.com/81589649/155384144-3f3326f2-1f23-4d22-bcf9-5027300160d9.gif)
 
 ## fov changer images;
 ### **zoom out [fov 130];**
