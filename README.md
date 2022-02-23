@@ -17,8 +17,7 @@
 7. third-person [on/off with custom hotkey]
 8. fov changer [zoom in zoom out with custom hotkey]
 9. triggerbot [with custom delay and hotkey]  
-**EXTRA**  
-(**VAC-BYPASS Currently only in compiled version!**)
+
 
 ## Instructions
 1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.2/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe` (run `main.exe` for no vac-bypass!)
