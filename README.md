@@ -1,6 +1,6 @@
 <div align=center>
   
-  # 💎csgo-multihack with UI [v1.1]💎
+  # 💎csgo-multihack with UI [v1.2]💎
   
   **⚠️-a wallhack with ui made in python currently (probably) vac undetected!-⚠️** 
   
@@ -18,7 +18,7 @@
 9. (**VAC-BYPASS Currently only in compiled version!**)
 
 ## Instructions
-1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.0/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe`
+1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.1/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe`
 2. Run the executable 
 3. change colors and config or don´t, and click `apply and inject`
 4. (**maby donate crypto :)** )
