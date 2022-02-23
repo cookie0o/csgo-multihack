@@ -1,11 +1,10 @@
 #imports
 import webbrowser
-import numpy as np
 import pymem
 import pymem.process
 import keyboard
 import time
-import pymem
+import ctypes
 from PyQt5 import QtCore,QtGui,QtWidgets
 from threading import Thread
 
@@ -14,8 +13,7 @@ from offsets import *
 
 #github link and version
 github_url='https://github.com/cookie0o'
-CURRENT_VERSION='v1.1'
-
+CURRENT_VERSION ='v1.2'
 
 #PATHS
 #current dir
@@ -24,27 +22,82 @@ dirname = os.path.dirname(__file__)
 #path to sounds
 sounds_path = os.path.join(dirname, 'sounds/')
 
+#path to python cache
+cache_path = os.path.join(dirname, '__pycache__')
 
 
 #RUN CHEAT LOOP
-def main(self):
+def main_cheat_loop(self):
 
+  try:
+      pm=pymem.Pymem("csgo.exe")
+      client=pymem.process.module_from_name(pm.process_handle,'client.dll').lpBaseOfDll
+      engine=pymem.process.module_from_name(pm.process_handle,'engine.dll').lpBaseOfDll
+      enginepointer=pm.read_int(engine+dwClientState)
+      player = pm.read_int(client + dwLocalPlayer)
+      localplayer = pm.read_int(client + dwLocalPlayer)
+  except pymem.exception.ProcessNotFound:
+      pass
+
+
+  cheat_loop_on_off = True
+
+  zoom_on_in  = 0
+  zoom_on_out = 0
+ 
+
+  while cheat_loop_on_off is True:
     try:
-        pm=pymem.Pymem("csgo.exe")
-        client=pymem.process.module_from_name(pm.process_handle,'client.dll').lpBaseOfDll
-        engine=pymem.process.module_from_name(pm.process_handle,'engine.dll').lpBaseOfDll
-        enginepointer=pm.read_int(engine+dwClientState)
-        player = pm.read_int(client + dwLocalPlayer)
-        hitsound = pm.read_int(player + m_totalHitsOnServer)
-    except pymem.exception.ProcessNotFound:
+    
+    #dejector
+      #get deject key
+      DEJECT_hit_key_=self.DEJECT_hit_key.text()
+      #check if deject key is pressed
+      if keyboard.is_pressed(DEJECT_hit_key_):
+        cheat_loop_on_off = False
+        #reset zoom and third-person;
+        #zoom
+        fov = player + m_iFOV
+        pm.write_int(fov, 90)
+        #third-person
+        pm.write_int(localplayer + m_iObserverMode, 0)
+        fov = player + m_iFOV
+        pm.write_int(fov, 90)
+      else:
         pass
 
-    zoom_on_in = 0
-    zoom_on_out = 0
+
+
+    #delay
+      time.sleep(0.0001)
     
-    while True:
-  
-      time.sleep(0.001)
+
+      #THIRD-PERSON
+      third_person_on_off = 0
+      THIRD_PERSON_toggle_key_=self.THIRD_PERSON_toggle_key.text()
+      if keyboard.is_pressed(THIRD_PERSON_toggle_key_) and self.THIRD_PERSON_checkbox.isChecked():
+        if third_person_on_off == 0:
+          third_person_on_off = 2
+          time.sleep(0.1)
+          pm.write_int(localplayer + m_iObserverMode, 1)
+          fov = player + m_iFOV
+          pm.write_int(fov, 100)
+        else:
+          pass
+      else:
+        pass
+
+      if keyboard.is_pressed(THIRD_PERSON_toggle_key_) and third_person_on_off==2:
+        third_person_on_off = 0
+        time.sleep(0.1)
+        pm.write_int(localplayer + m_iObserverMode, 0)
+        fov = player + m_iFOV
+        pm.write_int(fov, 90)
+      else:
+        pass
+      #THIRD-PERSON-END
+    
+
       BUNNYHOP_on_off=0
       if self.BUNNYHOP_ON_checkbox.isChecked():
         BUNNYHOP_on_off=1
@@ -53,7 +106,6 @@ def main(self):
         try:
         
           if pm.read_int(client+dwLocalPlayer):
-            player=pm.read_int(client+dwLocalPlayer)
             force_jump=client+dwForceJump
             on_ground=pm.read_int(player+m_fFlags)
             velocity=pm.read_float(player+m_vecVelocity)
@@ -133,7 +185,6 @@ def main(self):
 
           #ZOOM
           inputFOV = int(round(FOV_IN_VALUE_FLOAT, 0))
-          player = pm.read_int(client + dwLocalPlayer)
           inputFOV = int(round(FOV_IN_VALUE_FLOAT, 0))
 
           fov = player + m_iFOV
@@ -146,7 +197,6 @@ def main(self):
         time.sleep(0.1)
         zoom_on_in = 0
         #reset zoom
-        player = pm.read_int(client + dwLocalPlayer)
         fov = player + m_iFOV
         pm.write_int(fov, 90)
       else:
@@ -264,18 +314,31 @@ def main(self):
                     pm.write_int(glow_manager+entity_glow*56+40,ESP_ct_on_off)
 
 
+    #show error msg when csgo was closed or an error occurred
+    except:
+      MessageBox = ctypes.windll.user32.MessageBoxW
+      MessageBox(None, 'cs:go was closed or an error occurred!', 'Error', 16)
+      #remove cache
+      os.system(f"@RD /S /Q {cache_path}")
+      return
+
+
+
 
 def main_start(self):
-    try:
-      pymem.Pymem("csgo.exe")
-    except pymem.exception.ProcessNotFound:
-      print('Launch Game')
+  try:
+    pymem.Pymem("csgo.exe")
+  except pymem.exception.ProcessNotFound:
+    MessageBox = ctypes.windll.user32.MessageBoxW
+    MessageBox(None, 'pls start cs:go and press ok!', 'Error', 16)
 
-    Thread(target=main(self)).start()
 
+  #run main cheat loop
+  Thread(target=main_cheat_loop(self)).start()
+  
 
 #MAIN UI
-class Ui_main_window(object):
+class main_window(object):
     def setupUi(self, main_window):
         main_window.setObjectName("main_window")
         main_window.resize(535, 270)
@@ -355,6 +418,23 @@ class Ui_main_window(object):
         self.inject_button.setFont(font)
         self.inject_button.setStyleSheet("background-color: rgb(0, 255, 255);")
         self.inject_button.setObjectName("inject_button")
+        self.deject_key_text = QtWidgets.QLabel(self.frame)
+        self.deject_key_text.setGeometry(QtCore.QRect(90, 100, 341, 21))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.deject_key_text.setFont(font)
+        self.deject_key_text.setAlignment(QtCore.Qt.AlignCenter)
+        self.deject_key_text.setObjectName("deject_key_text")
+        self.DEJECT_hit_key = QtWidgets.QLineEdit(self.frame)
+        self.DEJECT_hit_key.setGeometry(QtCore.QRect(300, 100, 51, 20))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.DEJECT_hit_key.setFont(font)
+        self.DEJECT_hit_key.setMaxLength(333)
+        self.DEJECT_hit_key.setAlignment(QtCore.Qt.AlignCenter)
+        self.DEJECT_hit_key.setObjectName("DEJECT_hit_key")
         self.tabWidget.addTab(self.home_tab, "")
         self.esp_tab = QtWidgets.QWidget()
         self.esp_tab.setObjectName("esp_tab")
@@ -569,6 +649,29 @@ class Ui_main_window(object):
         self.label_2.setFont(font)
         self.label_2.setStyleSheet("color: rgb(200, 0, 200);")
         self.label_2.setObjectName("label_2")
+        self.THIRD_PERSON_checkbox = QtWidgets.QCheckBox(self.misc_tab)
+        self.THIRD_PERSON_checkbox.setGeometry(QtCore.QRect(380, 10, 151, 21))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.THIRD_PERSON_checkbox.setFont(font)
+        self.THIRD_PERSON_checkbox.setObjectName("THIRD_PERSON_checkbox")
+        self.label_9 = QtWidgets.QLabel(self.misc_tab)
+        self.label_9.setGeometry(QtCore.QRect(380, 30, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.label_9.setFont(font)
+        self.label_9.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_9.setObjectName("label_9")
+        self.THIRD_PERSON_toggle_key = QtWidgets.QLineEdit(self.misc_tab)
+        self.THIRD_PERSON_toggle_key.setGeometry(QtCore.QRect(460, 30, 71, 31))
+        font = QtGui.QFont()
+        font.setPointSize(17)
+        self.THIRD_PERSON_toggle_key.setFont(font)
+        self.THIRD_PERSON_toggle_key.setMaxLength(333)
+        self.THIRD_PERSON_toggle_key.setAlignment(QtCore.Qt.AlignCenter)
+        self.THIRD_PERSON_toggle_key.setObjectName("THIRD_PERSON_toggle_key")
         self.tabWidget.addTab(self.misc_tab, "")
         self.fov_tab = QtWidgets.QWidget()
         self.fov_tab.setObjectName("fov_tab")
@@ -737,7 +840,7 @@ class Ui_main_window(object):
         self.label_4.setObjectName("label_4")
         self.tabWidget.addTab(self.triggerbot_tab, "")
 
-
+        
         #BUTTONS
 
         #open github button
@@ -747,19 +850,21 @@ class Ui_main_window(object):
         self.inject_button.clicked.connect(lambda: Thread(target=main_start(self)).start())
 
 
-        self.retranslateUi(main_window)
+        self.retranslateUi(main_window_cheat)
         self.tabWidget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
+        QtCore.QMetaObject.connectSlotsByName(main_window_cheat)
 
     def retranslateUi(self, main_window):
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("main_window", "(っ◔◡◔)っ ♥ cs:go multyhack [by; cookie0_o] ♥"))
-        self.title.setText(_translate("main_window", "cs:go multyhack by;                 "))
+        main_window.setWindowTitle(_translate("main_window", "(っ◔◡◔)っ ♥ cs:go multihack [by; cookie0_o] ♥"))
+        self.title.setText(_translate("main_window", "cs:go multihack by;                 "))
         self.version.setText(_translate("main_window", f"{CURRENT_VERSION}"))
         self.github_link_button.setText(_translate("main_window", "cookie0_o"))
         self.label.setText(_translate("main_window", "have fun cheating!"))
         self.inject_notice.setText(_translate("main_window", "inject cheat with selected features;"))
         self.inject_button.setText(_translate("main_window", "INJECT"))
+        self.deject_key_text.setText(_translate("main_window", "deject key;"))
+        self.DEJECT_hit_key.setText(_translate("main_window", "F11"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.home_tab), _translate("main_window", "home"))
         self.CT_box.setTitle(_translate("main_window", "COUNTER TERRORIST GLOW"))
         self.CT_GLOW_ON_checkbox.setText(_translate("main_window", "CT glow on"))
@@ -786,6 +891,9 @@ class Ui_main_window(object):
         self.label_2.setText(_translate("main_window", " if you see this\n"
 " pls star this project on github\n"
 " much love :)"))
+        self.THIRD_PERSON_checkbox.setText(_translate("main_window", "third person"))
+        self.label_9.setText(_translate("main_window", "toggleKey;"))
+        self.THIRD_PERSON_toggle_key.setText(_translate("main_window", "V"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.misc_tab), _translate("main_window", "misc"))
         self.ZOOM_OUT_FOV_ON_checkbox.setText(_translate("main_window", "zoom out FOV;"))
         self.FOV_OUT_VALUE.setText(_translate("main_window", "130"))
@@ -806,12 +914,31 @@ class Ui_main_window(object):
         self.label_4.setText(_translate("main_window", "seconds"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.triggerbot_tab), _translate("main_window", "triggerbot"))
 
+
 import _res_.res_rc
 if __name__=='__main__':
   import sys
   app=QtWidgets.QApplication(sys.argv)
-  main_window=QtWidgets.QWidget()
-  ui=Ui_main_window()
-  ui.setupUi(main_window)
-  main_window.show()
+  main_window_cheat=QtWidgets.QWidget()
+  ui=main_window()
+  ui.setupUi(main_window_cheat)
+  main_window_cheat.show()
+  sys.exit(app.exec_())
+
+
+#show / hide window
+
+def hide_window():
+  main_window_cheat=QtWidgets.QWidget()
+  ui=main_window()
+  ui.setupUi(main_window_cheat)
+  main_window_cheat.hide()
+  pass
+
+def show_window():
+  app=QtWidgets.QApplication(sys.argv)
+  main_window_cheat=QtWidgets.QWidget()
+  ui=main_window()
+  ui.setupUi(main_window_cheat)
+  main_window_cheat.show()
   sys.exit(app.exec_())
