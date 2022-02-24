@@ -22,7 +22,7 @@ vac-bypass includet in compiled version if you need one!
 
 
 ## Instructions
-1. [Download](https://github.com/cookie0o/cs.go-multihack/releases/download/v1.2/cs.go.multihack.by.cookie0.o.rar) the executable `cs.go.multihack.by.cookie0_o.exe`
+1. [Download](https://github.com/cookie0o/csgo-multihack/releases/tag/v1.2) the executable `cs.go.multihack.by.cookie0_o.exe`
 2. Run the executable 
 3. change colors and config or don´t, and click `apply and inject`
 4. (**maby donate crypto :)** )
