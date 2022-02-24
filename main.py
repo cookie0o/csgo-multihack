@@ -19,8 +19,6 @@ CURRENT_VERSION ='v1.2'
 #current dir
 dirname = os.path.dirname(__file__)
 
-#path to sounds
-sounds_path = os.path.join(dirname, 'sounds/')
 
 #path to python cache
 cache_path = os.path.join(dirname, '__pycache__')
