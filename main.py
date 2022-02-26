@@ -5,15 +5,17 @@ import pymem.process
 import keyboard
 import time
 import ctypes
+import re
 from PyQt5 import QtCore,QtGui,QtWidgets
 from threading import Thread
+import atexit
 
 #import offsets
 from offsets import *
 
 #github link and version
 github_url='https://github.com/cookie0o'
-CURRENT_VERSION ='v1.2'
+CURRENT_VERSION ='v1.3'
 
 #PATHS
 #current dir
@@ -22,6 +24,7 @@ dirname = os.path.dirname(__file__)
 
 #path to python cache
 cache_path = os.path.join(dirname, '__pycache__')
+
 
 
 #RUN CHEAT LOOP
@@ -42,7 +45,10 @@ def main_cheat_loop(self):
 
   zoom_on_in  = 0
   zoom_on_out = 0
- 
+  
+  night_mode = 0
+
+  money_reveal_alr_ON = 0
 
   while cheat_loop_on_off is True:
     try:
@@ -53,21 +59,34 @@ def main_cheat_loop(self):
       #check if deject key is pressed
       if keyboard.is_pressed(DEJECT_hit_key_):
         cheat_loop_on_off = False
-        #reset zoom and third-person;
-        #zoom
-        fov = player + m_iFOV
-        pm.write_int(fov, 90)
-        #third-person
-        pm.write_int(localplayer + m_iObserverMode, 0)
-        fov = player + m_iFOV
-        pm.write_int(fov, 90)
+        #reset cheat features;
+        try:
+        #reset fov and third person
+          pm.write_int(localplayer + m_iObserverMode, 0)
+        #reset zoom
+          fov = player + m_iFOV;pm.write_int(fov, 90)
+        #reset nightmode
+          #CURRENTLY NOT WORKING
+        #reset money-reveal
+          A=pymem.process.module_from_name(pm.process_handle,'client.dll')
+          B=pm.read_bytes(A.lpBaseOfDll,A.SizeOfImage)
+          C=A.lpBaseOfDll+re.search(b'.\\x0C\\x5B\\x5F\\xB8\\xFB\\xFF\\xFF\\xFF',B).start()
+          pm.write_uchar(C, 0xEB if pm.read_uchar(C) == 0x75 else 0x75)
+        except:
+          pass
       else:
         pass
 
 
 
-    #delay
-      time.sleep(0.0001)
+    #if you want the best experience and have a good cpu change this to False like this! :: delay = False
+      delay = True
+      if delay is True:
+        time.sleep(0.001)
+        pass
+      else:
+        pass
+      
     
 
       #THIRD-PERSON
@@ -227,7 +246,93 @@ def main_cheat_loop(self):
       else:
         pass
 
+
+      #NIGHTMODE
+
+      #get nightmode toggle key
+      NIGHTMODE_toggle_key_=self.NIGHTMODE_toggle_key.text()
+
+      #get light value;
+      NIGHTMODE_LIGHT_VALUE_=self.NIGHTMODE_LIGHT_VALUE.text()
+      #convert str to float
+      NIGHTMODE_LIGHT_VALUE_FLOAT = float(NIGHTMODE_LIGHT_VALUE_)
+
+      if keyboard.is_pressed(NIGHTMODE_toggle_key_) and self.NIGHTMODE_ON_checkbox.isChecked():
+        if night_mode == 0:
+          night_mode = 2
+
+        else:
+          if night_mode == 2:
+            night_mode = 0
+
       
+      if night_mode == 2:
+        for i in range(0, 2048):
+          entity = pm.read_uint(client + dwEntityList + i * 0x10)
+          if entity:
+              EntityClassID = pm.read_int(entity + 0x8)
+              huita1 = pm.read_int(EntityClassID + 2 * 0x4)
+              huita2 = pm.read_int(huita1 + 0x1)
+              huita3 = pm.read_int(huita2 + 20)
+
+              if (huita3 != 69):
+                  continue
+              
+              if True:
+                  pm.write_int(entity + m_bUseCustomAutoExposureMin, 1)
+                  pm.write_int(entity + m_bUseCustomAutoExposureMax, 1)
+                  pm.write_float(entity + m_flCustomAutoExposureMin, NIGHTMODE_LIGHT_VALUE_FLOAT)
+                  pm.write_float(entity + m_flCustomAutoExposureMax, NIGHTMODE_LIGHT_VALUE_FLOAT)
+              else:
+                  pm.write_bool(entity + m_bUseCustomAutoExposureMin, 0)
+                  pm.write_bool(entity + m_bUseCustomAutoExposureMax, 0)
+      else:
+        pass
+
+      if night_mode == 0:
+        #reset nightmode
+        for i in range(0, 2048):
+          entity = pm.read_uint(client + dwEntityList + i * 0x10)
+          if entity:
+              EntityClassID = pm.read_int(entity + 0x8)
+              a = pm.read_int(EntityClassID + 2 * 0x4)
+              b = pm.read_int(a + 0x1)
+              c = pm.read_int(b + 20)
+
+              if (c != 69):
+                  continue
+              
+              if True:
+                  pm.write_int(entity + m_bUseCustomAutoExposureMin, 1)
+                  pm.write_int(entity + m_bUseCustomAutoExposureMax, 1)
+                  pm.write_float(entity + m_flCustomAutoExposureMin, 1.0)
+                  pm.write_float(entity + m_flCustomAutoExposureMax, 1.0)
+              else:
+                  pm.write_bool(entity + m_bUseCustomAutoExposureMin, 0)
+                  pm.write_bool(entity + m_bUseCustomAutoExposureMax, 0)
+      else:
+        pass
+
+
+      #MONEY REVEAL
+      if self.MONEY_REVEAL_ON_checkbox.isChecked():
+        if money_reveal_alr_ON == 0:
+          try:
+            client_money_reveal = pymem.process.module_from_name(pm.process_handle, 'client.dll')
+            clientModule = pm.read_bytes(client_money_reveal.lpBaseOfDll, client_money_reveal.SizeOfImage)
+            address = client_money_reveal.lpBaseOfDll + re.search(rb'.\x0C\x5B\x5F\xB8\xFB\xFF\xFF\xFF', clientModule).start()
+            pm.write_uchar(address, 0xEB if pm.read_uchar(address) == 0x75 else 0x75)
+            money_reveal_alr_ON = 1
+          except:
+            pass
+      #reset money reveal
+      else:
+        try:
+          pm.write_uchar(address, 0xEB if pm.read_uchar(address) == 0x75 else 0x75)
+        except:
+          pass
+
+
       #TRIGGER BOT
       
       #get trigger key
@@ -294,7 +399,7 @@ def main_cheat_loop(self):
           entity_team_id=pm.read_int(entity+m_iTeamNum)
           entity_glow=pm.read_int(entity+m_iGlowIndex)
 
-
+          
           if ESP_t_on_off==1:
             if entity_team_id==2:
               pm.write_float(glow_manager+entity_glow*56+8,float(T_R))
@@ -303,13 +408,18 @@ def main_cheat_loop(self):
               pm.write_float(glow_manager+entity_glow*56+20,float(1))
               pm.write_int(glow_manager+entity_glow*56+40,ESP_t_on_off)
 
-            if ESP_ct_on_off==1:
-              if entity_team_id==3:
-                    pm.write_float(glow_manager+entity_glow*56+8,float(CT_R))
-                    pm.write_float(glow_manager+entity_glow*56+12,float(CT_G))
-                    pm.write_float(glow_manager+entity_glow*56+16,float(CT_B))
-                    pm.write_float(glow_manager+entity_glow*56+20,float(1))
-                    pm.write_int(glow_manager+entity_glow*56+40,ESP_ct_on_off)
+          if ESP_ct_on_off==1:
+            if entity_team_id==3:
+              pm.write_float(glow_manager+entity_glow*56+8,float(CT_R))
+              pm.write_float(glow_manager+entity_glow*56+12,float(CT_G))
+              pm.write_float(glow_manager+entity_glow*56+16,float(CT_B))
+              pm.write_float(glow_manager+entity_glow*56+20,float(1))
+              pm.write_int(glow_manager+entity_glow*56+40,ESP_ct_on_off)
+
+
+
+
+
 
 
     #show error msg when csgo was closed or an error occurred
@@ -317,7 +427,10 @@ def main_cheat_loop(self):
       MessageBox = ctypes.windll.user32.MessageBoxW
       MessageBox(None, 'cs:go was closed or an error occurred!', 'Error', 16)
       #remove cache
-      os.system(f"@RD /S /Q {cache_path}")
+      try:
+        os.system(f"@RD /S /Q {cache_path}")
+      except:
+        return
       return
 
 
@@ -670,6 +783,14 @@ class main_window(object):
         self.THIRD_PERSON_toggle_key.setMaxLength(333)
         self.THIRD_PERSON_toggle_key.setAlignment(QtCore.Qt.AlignCenter)
         self.THIRD_PERSON_toggle_key.setObjectName("THIRD_PERSON_toggle_key")
+        self.MONEY_REVEAL_ON_checkbox = QtWidgets.QCheckBox(self.misc_tab)
+        self.MONEY_REVEAL_ON_checkbox.setGeometry(QtCore.QRect(10, 140, 131, 21))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.MONEY_REVEAL_ON_checkbox.setFont(font)
+        self.MONEY_REVEAL_ON_checkbox.setObjectName("MONEY_REVEAL_ON_checkbox")
         self.tabWidget.addTab(self.misc_tab, "")
         self.fov_tab = QtWidgets.QWidget()
         self.fov_tab.setObjectName("fov_tab")
@@ -837,7 +958,68 @@ class main_window(object):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.tabWidget.addTab(self.triggerbot_tab, "")
-
+        self.nightmode_tab = QtWidgets.QWidget()
+        self.nightmode_tab.setObjectName("nightmode_tab")
+        self.frame_3 = QtWidgets.QFrame(self.nightmode_tab)
+        self.frame_3.setGeometry(QtCore.QRect(10, 10, 511, 221))
+        self.frame_3.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setLineWidth(2)
+        self.frame_3.setObjectName("frame_3")
+        self.NIGHTMODE_ON_checkbox = QtWidgets.QCheckBox(self.frame_3)
+        self.NIGHTMODE_ON_checkbox.setGeometry(QtCore.QRect(10, 10, 171, 41))
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        font.setBold(True)
+        font.setWeight(75)
+        self.NIGHTMODE_ON_checkbox.setFont(font)
+        self.NIGHTMODE_ON_checkbox.setChecked(True)
+        self.NIGHTMODE_ON_checkbox.setObjectName("NIGHTMODE_ON_checkbox")
+        self.label_11 = QtWidgets.QLabel(self.frame_3)
+        self.label_11.setGeometry(QtCore.QRect(10, 50, 111, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_11.setFont(font)
+        self.label_11.setObjectName("label_11")
+        self.NIGHTMODE_toggle_key = QtWidgets.QLineEdit(self.frame_3)
+        self.NIGHTMODE_toggle_key.setGeometry(QtCore.QRect(110, 50, 81, 41))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        self.NIGHTMODE_toggle_key.setFont(font)
+        self.NIGHTMODE_toggle_key.setMaxLength(333)
+        self.NIGHTMODE_toggle_key.setAlignment(QtCore.Qt.AlignCenter)
+        self.NIGHTMODE_toggle_key.setObjectName("NIGHTMODE_toggle_key")
+        self.NIGHTMODE_LIGHT_VALUE = QtWidgets.QLineEdit(self.frame_3)
+        self.NIGHTMODE_LIGHT_VALUE.setGeometry(QtCore.QRect(110, 100, 111, 31))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.NIGHTMODE_LIGHT_VALUE.setFont(font)
+        self.NIGHTMODE_LIGHT_VALUE.setMaxLength(333)
+        self.NIGHTMODE_LIGHT_VALUE.setAlignment(QtCore.Qt.AlignCenter)
+        self.NIGHTMODE_LIGHT_VALUE.setObjectName("NIGHTMODE_LIGHT_VALUE")
+        self.label_12 = QtWidgets.QLabel(self.frame_3)
+        self.label_12.setGeometry(QtCore.QRect(10, 90, 111, 41))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.label_12.setFont(font)
+        self.label_12.setObjectName("label_12")
+        self.label_13 = QtWidgets.QLabel(self.frame_3)
+        self.label_13.setGeometry(QtCore.QRect(190, 60, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_13.setFont(font)
+        self.label_13.setObjectName("label_13")
+        self.NIGHTMODE_ON_checkbox.raise_()
+        self.label_11.raise_()
+        self.NIGHTMODE_toggle_key.raise_()
+        self.label_12.raise_()
+        self.NIGHTMODE_LIGHT_VALUE.raise_()
+        self.label_13.raise_()
+        self.tabWidget.addTab(self.nightmode_tab, "")
         
         #BUTTONS
 
@@ -892,6 +1074,7 @@ class main_window(object):
         self.THIRD_PERSON_checkbox.setText(_translate("main_window", "third person"))
         self.label_9.setText(_translate("main_window", "toggleKey;"))
         self.THIRD_PERSON_toggle_key.setText(_translate("main_window", "V"))
+        self.MONEY_REVEAL_ON_checkbox.setText(_translate("main_window", "money reveal"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.misc_tab), _translate("main_window", "misc"))
         self.ZOOM_OUT_FOV_ON_checkbox.setText(_translate("main_window", "zoom out FOV;"))
         self.FOV_OUT_VALUE.setText(_translate("main_window", "130"))
@@ -911,6 +1094,13 @@ class main_window(object):
         self.TRIGGERBOT_DELAY.setText(_translate("main_window", "0"))
         self.label_4.setText(_translate("main_window", "seconds"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.triggerbot_tab), _translate("main_window", "triggerbot"))
+        self.NIGHTMODE_ON_checkbox.setText(_translate("main_window", "nightmode"))
+        self.label_11.setText(_translate("main_window", "toggle Key:"))
+        self.NIGHTMODE_toggle_key.setText(_translate("main_window", "P"))
+        self.NIGHTMODE_LIGHT_VALUE.setText(_translate("main_window", "0.0900"))
+        self.label_12.setText(_translate("main_window", "light value:"))
+        self.label_13.setText(_translate("main_window", "press key again to turn off!"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.nightmode_tab), _translate("main_window", "nightmode"))
 
 
 import _res_.res_rc
