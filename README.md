@@ -8,17 +8,19 @@
 
 
 # features;
-1. wallhack-esp
-2. esp custom colors
-3. bunnyhop
-4. radar esp
-5. noflash
-6. deject func. to change config [with custom hotkey]
-7. third-person [on/off with custom hotkey]
-8. fov changer [zoom in zoom out with custom hotkey]
-9. triggerbot [with custom delay and hotkey]  
-**EXTRA;**  
+1. **wallhack-esp**
+2. **esp custom colors**
+3. **bunnyhop**
+4. **radar esp**
+5. **noflash**
+6. **deject func.** to change config [with custom hotkey]
+7. **third-person** [on/off with custom hotkey]
+8. **fov changer** [zoom in zoom out with custom hotkey]
+9. **triggerbot** [with custom delay and hotkey]  
+```
+EXTRA;  
 vac-bypass includet in compiled version if you need one!
+```
 
 
 ## Instructions
