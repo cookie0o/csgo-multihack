@@ -24,6 +24,8 @@ EXTRA;
 vac-bypass includet in compiled version if you need one!
 ```
 
+#### cheat UI;
+![ezgif-2-b91a55a653](https://user-images.githubusercontent.com/81589649/155862596-0434e3a0-219c-438c-841c-b7a09de958da.gif)
 
 ## Instructions
 1. [Download](https://github.com/cookie0o/csgo-multihack/releases/tag/v1.2) the executable `cs.go.multihack.by.cookie0_o.exe`
@@ -31,9 +33,6 @@ vac-bypass includet in compiled version if you need one!
 3. change colors and config or don´t, and click `apply and inject`
 4. (**maby donate crypto :)** )
 5. **DONE!**
-
-#### cheat UI;
-![ezgif-2-b91a55a653](https://user-images.githubusercontent.com/81589649/155862596-0434e3a0-219c-438c-841c-b7a09de958da.gif)
 
 ## fov changer images;
 ### **zoom out [fov 130];**
