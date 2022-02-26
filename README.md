@@ -33,7 +33,7 @@ vac-bypass includet in compiled version if you need one!
 5. **DONE!**
 
 ## cheat UI;
-![ezgif-1-85c6d909f4](https://user-images.githubusercontent.com/81589649/155384144-3f3326f2-1f23-4d22-bcf9-5027300160d9.gif)
+![ezgif-2-b91a55a653](https://user-images.githubusercontent.com/81589649/155862596-0434e3a0-219c-438c-841c-b7a09de958da.gif)
 
 ## fov changer images;
 ### **zoom out [fov 130];**
